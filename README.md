@@ -10,4 +10,6 @@
 - ➖ Neutral (нейтральная)
 
 ## 🏗️ Структура проекта
+financial_risk_nlp_project/ ├── data/ # Данные │ ├── raw/ # Исходные данные (не коммитятся в Git) │ └── processed/ # Обработанные данные (не коммитятся в Git) ├── models/ # Обученные модели (не коммитятся в Git) ├── notebooks/ # Jupyter notebooks для анализа │ └── data_analysis.ipynb # Основной notebook с анализом ├── src/ # Исходный код │ ├── data_collection.py # Скрипт сбора данных │ ├── data_preprocessing.py # Скрипт предобработки данных │ ├── train_model.py # Скрипт обучения модели │ └── demo.py # Демо-скрипт для тестирования ├── analysis_results/ # Результаты анализа (графики и т.д.) ├── venv/ # Виртуальное окружение (не коммитится в Git) ├── .gitignore # Файл исключений для Git ├── requirements.txt # Зависимости Python ├── PROJECT_SUMMARY.md # Краткое описание проекта ├── project_report.txt # Подробный отчет о проекте └── README.md # Этот файл
+
 
