@@ -1,9 +1,4 @@
-# БЫЛО (типичный вариант)
-model = LogisticRegression(C=1.0, max_iter=1000)
-model.fit(X_train, y_train)
-print(accuracy_score(y_test, y_pred))
 
-# СТАЛО
 import logging
 import json
 from pathlib import Path
