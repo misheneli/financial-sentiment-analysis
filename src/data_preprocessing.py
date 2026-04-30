@@ -1,29 +1,28 @@
-import pandas as pd
-import os
 
-def preprocess_financial_news():
-    # Загружаем данные
-    df = pd.read_csv('data/raw/all-data.csv', encoding='latin-1', header=None)
-    
-    # Переименовываем колонки
-    df.columns = ['sentiment', 'text']
-    
-    # Очищаем текст (убираем лишние пробелы)
-    df['text'] = df['text'].str.strip()
-    
-    # Создаем папку processed если ее нет
-    os.makedirs('data/processed', exist_ok=True)
-    
-    # Сохраняем обработанные данные
-    processed_path = 'data/processed/financial_news_processed.csv'
-    df.to_csv(processed_path, index=False)
-    
-    print(f"Обработанные данные сохранены в: {processed_path}")
-    print(f"Размер датасета: {len(df)} записей")
-    print("Распределение sentiment:")
-    print(df['sentiment'].value_counts())
-    
-    return df
+import re
+from sklearn.pipeline import Pipeline
+from sklearn.feature_extraction.text import TfidfVectorizer
+from sklearn.base import BaseEstimator, TransformerMixin
 
-if __name__ == "__main__":
-    preprocess_financial_news()
+class TextCleaner(BaseEstimator, TransformerMixin):
+    def fit(self, X, y=None): return self
+    def transform(self, X):
+        return [self._clean(text) for text in X]
+    
+    @staticmethod
+    def _clean(text: str) -> str:
+        text = text.lower()
+        text = re.sub(r"http\S+", "", text)          # убрать ссылки
+        text = re.sub(r"[^a-zA-Z\s]", " ", text)    # только буквы
+        text = re.sub(r"\s+", " ", text).strip()
+        return text
+
+def build_pipeline(max_features: int = 10_000, ngram_range: tuple = (1, 2)) -> Pipeline:
+    return Pipeline([
+        ("cleaner", TextCleaner()),
+        ("tfidf", TfidfVectorizer(
+            max_features=max_features,
+            ngram_range=ngram_range,
+            sublinear_tf=True,   # log-scaling — важно для NLP
+        )),
+    ])
